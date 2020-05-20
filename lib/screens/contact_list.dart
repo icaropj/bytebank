@@ -3,9 +3,12 @@ import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:flutter/material.dart';
 
-class ContactList extends StatelessWidget {
-//  final List<Contact> contacts = List();
+class ContactList extends StatefulWidget {
+  @override
+  _ContactListState createState() => _ContactListState();
+}
 
+class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,32 +19,16 @@ class ContactList extends StatelessWidget {
         initialData: List(),
         future: findAll(),
         builder: (context, snapshot) {
-          switch(snapshot.connectionState) {
+          switch (snapshot.connectionState) {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Text('Loading'),
-                  ],
-                ),
-              );
+              return _createProgress();
               break;
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              final List<Contact> contacts = snapshot.data;
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final contact = contacts[index];
-                  return _ContactItem(contact);
-                },
-                itemCount: contacts.length,
-              );
+              return _createListView(snapshot);
               break;
           }
           return Text('Unknown error');
@@ -51,10 +38,34 @@ class ContactList extends StatelessWidget {
         onPressed: () {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => ContactForm()))
-              .then((newContact) => debugPrint(newContact.toString()));
+              .then((value) => setState(() {})); //todo: review list update
         },
         child: Icon(Icons.add),
       ),
+    );
+  }
+
+  Center _createProgress() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          CircularProgressIndicator(),
+          Text('Loading'),
+        ],
+      ),
+    );
+  }
+
+  ListView _createListView(AsyncSnapshot<List<Contact>> snapshot) {
+    final List<Contact> contacts = snapshot.data;
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        final contact = contacts[index];
+        return _ContactItem(contact);
+      },
+      itemCount: contacts.length,
     );
   }
 }
