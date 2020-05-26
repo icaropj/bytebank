@@ -23,10 +23,14 @@ class Dashboard extends StatelessWidget {
                 _DashboardItem(
                   'Transfer',
                   Icons.monetization_on,
+                  onClick: () {
+                    _showContactList(context);
+                  },
                 ),
                 _DashboardItem(
                   'Transaction Feed',
                   Icons.description,
+                  onClick: () => print('Transaction feed clicked'),
                 ),
               ],
             ),
@@ -35,13 +39,19 @@ class Dashboard extends StatelessWidget {
       ),
     );
   }
+
+  void _showContactList(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ContactList()));
+  }
 }
 
 class _DashboardItem extends StatelessWidget {
   final String _name;
   final IconData _icon;
+  final Function onClick;
 
-  _DashboardItem(this._name, this._icon);
+  _DashboardItem(this._name, this._icon, {@required this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +83,7 @@ class _DashboardItem extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => ContactList()));
-          },
+          onTap: () => onClick(),
         ),
       ),
     );
