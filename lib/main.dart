@@ -1,3 +1,4 @@
+import 'package:bytebank/http/webclient.dart';
 import 'package:bytebank/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,7 @@ void main() => runApp(ByteBankApp());
 class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    findAll();
     return MaterialApp(
         theme: ThemeData(
             primaryColor: Colors.green[900],
