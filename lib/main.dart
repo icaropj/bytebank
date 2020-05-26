@@ -7,7 +7,7 @@ void main() => runApp(ByteBankApp());
 class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    findAll();
+    findAll().then((transactions) => print('transactions $transactions'));
     return MaterialApp(
         theme: ThemeData(
             primaryColor: Colors.green[900],
